@@ -13,29 +13,34 @@
 
 
 #define CLI_LOGIN 		1 	//客户端请求登录
-#define LOG_SUC 		2 	//登录成功
-#define LOG_QUIT 		3 	//登录退出
-#define LOG_SHW_INF 	4 	//查看个人信息
-#define LOG_CGE_PSW 	5 	//修改密码
-#define CGE_PSW_OK 		6 	//修改密码成功
-#define LOG_CGE_NAME 	7 	//修改名字
-#define CGE_NAME_OK 	8 	//修改名字成功
-#define LOG_CGE_AGE 	9 	//修改年龄
-#define CGE_AGE_OK  	10 	//修改年龄成功
-#define LOG_CGE_SEX 	11 	//修改性别
-#define CGE_SEX_OK 		12 	//修改性别成功
-#define LOG_CGE_SAL 	13 	//修改工资
-#define CGE_SAL_OK 		14 	//修改工资成功
-#define LOG_CGE_DEP 	15 	//修改部门
-#define CGE_DEP_OK 		16 	//修改部门成功
-#define LOG_CGE_TELE 	17 	//修改电话
-#define CGE_TELE_OK 	18 	//修改电话成功
-#define LOG_CGE_MAIL 	19 	//修改邮箱
-#define CGE_MAIL_OK 	20 	//修改邮箱成功
-#define LOG_CGE_ADDR 	21 	//修改地址
-#define CGE_ADDR_OK 	22 	//修改地址成功
-#define LOG_SHW_HIS 	23 	//显示历史信息
+#define CLI_REGIS 		2 	//客服端请求注册
 
+
+#define LOG_SHW_INF 	3 	//查看个人信息
+#define LOG_SHW_HIS 	4 	//显示历史信息
+#define LOG_CGE_PSW 	5 	//修改密码
+#define LOG_CGE_NAME 	6 	//修改名字
+#define LOG_CGE_AGE 	7 	//修改年龄
+#define LOG_CGE_SEX 	8 	//修改性别
+#define LOG_CGE_SAL 	9 	//修改工资
+#define LOG_CGE_DEP 	10 	//修改部门
+#define LOG_CGE_TELE 	11 	//修改电话
+#define LOG_CGE_MAIL 	12 	//修改邮箱
+#define LOG_CGE_ADDR 	13 	//修改地址
+
+
+#define LOG_SUC 		14	//登录成功
+#define LOG_QUIT 		15	//登录退出
+#define REGIS_SUC 		16 	//注册成功
+#define CGE_PSW_OK 		17 	//修改密码成功
+#define CGE_NAME_OK 	18	//修改名字成功
+#define CGE_AGE_OK  	19 	//修改年龄成功
+#define CGE_SEX_OK 		20 	//修改性别成功
+#define CGE_SAL_OK 		21 	//修改工资成功
+#define CGE_DEP_OK 		22 	//修改部门成功
+#define CGE_TELE_OK 	23 	//修改电话成功
+#define CGE_MAIL_OK 	24 	//修改邮箱成功
+#define CGE_ADDR_OK 	25 	//修改地址成功
 
 
 typedef struct

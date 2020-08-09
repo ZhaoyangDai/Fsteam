@@ -43,11 +43,11 @@ void login_func(DATA *command, int sockfd)
 				perror("login_func send is error\n");
 				free(command);
 				close(sockfd);
-				return -1;
+				exit(1);
 			}
 		}else{
 			printf("输入错误！\n");
-			return -1;
+			exit(1);
 		}
 	}
 }
@@ -100,11 +100,11 @@ void root_login_func(DATA *command, int sockfd)
 				perror("root_login_func send is error\n");
 				free(command);
 				close(sockfd);
-				return -1;
+				exit(1);
 			}
 		}else{
 			printf("输入错误！\n");
-			return -1;
+			exit(1);
 		}
 	}
 }
