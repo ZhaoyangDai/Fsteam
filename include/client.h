@@ -1,4 +1,4 @@
-#ifdef __CLIENT_H__
+#ifndef __CLIENT_H__
 #define __CLIENT_H__
 
 #include <stdio.h>
@@ -24,12 +24,26 @@
 #define CGE_AGE_OK  	10 	//修改年龄成功
 #define LOG_CGE_SEX 	11 	//修改性别
 #define CGE_SEX_OK 		12 	//修改性别成功
+#define LOG_CGE_SAL 	13 	//修改工资
+#define CGE_SAL_OK 		14 	//修改工资成功
+#define LOG_CGE_DEP 	15 	//修改部门
+#define CGE_DEP_OK 		16 	//修改部门成功
+#define LOG_CGE_TELE 	17 	//修改电话
+#define CGE_TELE_OK 	18 	//修改电话成功
+#define LOG_CGE_MAIL 	19 	//修改邮箱
+#define CGE_MAIL_OK 	20 	//修改邮箱成功
+#define LOG_CGE_ADDR 	21 	//修改地址
+#define CGE_ADDR_OK 	22 	//修改地址成功
+#define LOG_SHW_HIS 	23 	//显示历史信息
+
+
 
 typedef struct
 {
 	char name[20];
 	char sex[10];
 	int age;
+	int number;
 	double salary;
 	char department[20];
 	double telephone;
@@ -50,6 +64,7 @@ typedef struct
 	int protocol;//命令位
 	data_t data;
 }DATA;
+
 
 int string_func(char *);
 void name_func(char *);

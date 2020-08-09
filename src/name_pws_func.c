@@ -28,7 +28,7 @@ void name_func(char *username)
 	char name[100];
 	while(1)
 	{
-		memset(namem,0,sizeof(name));
+		memset(name,0,sizeof(name));
 		printf("请输入用户名\n");
 		//从stdin中获取用户名
 		fgets(name,sizeof(name),stdin);

@@ -13,14 +13,14 @@ void cge_salary_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_salary_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_salary_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_SAL_OK){
 		printf("修改工资成功！\n");
@@ -42,14 +42,14 @@ void cge_dep_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_dep_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_dep_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_DEP_OK){
 		printf("修改部门成功！\n");
@@ -71,14 +71,14 @@ void cge_tele_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_tele_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_tele_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_TELE_OK){
 		printf("修改电话成功！\n");
@@ -100,14 +100,14 @@ void cge_mail_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_,mail_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_mail_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_MAIL_OK){
 		printf("修改邮箱成功！\n");
@@ -129,14 +129,14 @@ void cge_addr_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_addr_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_addr_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_ADDR_OK){
 		printf("修改地址成功！\n");

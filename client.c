@@ -75,7 +75,7 @@ int main(int argc, const char *argv[])
 			return -1;
 		}
 		//接收数据
-		memset(command,0,sizeof(DATA))；
+		memset(command,0,sizeof(DATA));
 		ret = recv(sockfd,0,sizeof(DATA),0);
 		if(ret < 0){
 			perror("recv error\n");

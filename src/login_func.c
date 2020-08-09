@@ -17,7 +17,7 @@ void login_func(DATA *command, int sockfd)
 		printf("请选择：\n");
 		memset(buf,0,sizeof(buf));
 		fgets(buf,sizeof(buf),stdin);
-		cbuf[strlen(buf)-1] = '\0';
+		buf[strlen(buf)-1] = '\0';
 		//选择判断
 		if((strcmp("1",buf)) == 0){
 			//查看信息函数
@@ -70,7 +70,7 @@ void root_login_func(DATA *command, int sockfd)
 		printf("请选择：\n");
 		memset(buf,0,sizeof(buf));
 		fgets(buf,sizeof(buf),stdin);
-		cbuf[strlen(buf)-1] = '\0';
+		buf[strlen(buf)-1] = '\0';
 		//选择判断
 		if((strcmp("1",buf)) == 0){
 			//添加用户函数

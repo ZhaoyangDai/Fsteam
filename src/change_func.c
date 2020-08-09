@@ -13,14 +13,14 @@ void cge_psw_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("change_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接受信息结构体
 	memset(command,0,sizeof(command));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("change_func send error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_PSW_OK){
 		printf("修改密码成功\n");
@@ -42,14 +42,14 @@ void cge_name_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_name_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_name_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_NAME_OK){
 		printf("修改名字成功！\n");
@@ -72,14 +72,14 @@ void cge_age_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_age_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_age_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_AGE_OK){
 		printf("修改年龄成功！\n");
@@ -101,14 +101,14 @@ void cge_sex_func(DATA *command,int sockfd)
 	ret = send(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_sex_func send error\n");
-		return -1;
+		exit(1);
 	}
 	//接收信息结构体
 	memset(command,0,sizeof(DATA));
 	ret = recv(sockfd,command,sizeof(DATA),0);
 	if(ret < 0){
 		perror("cge_sex_func recv error\n");
-		return -1;
+		exit(1);
 	}
 	if(command->protocol == CGE_SEX_OK){
 		printf("修改性别成功！\n");
@@ -164,7 +164,7 @@ void cge_info_func(DATA *command,int sockfd)
 					printf("输入错误！\n");
 				}
 			}
-		}else if((strcmp("3")) == 0){
+		}else if((strcmp("3",buf)) == 0){
 			break;
 		}else{
 			printf("输入错误！\n");
