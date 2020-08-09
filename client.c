@@ -8,41 +8,6 @@
 
 #include "client.h"
 
-#define CLI_LOGIN 		1 	//客户端请求登录
-#define LOG_SUC 		2 	//登录成功
-#define LOG_QUIT 		3 	//登录退出
-#define LOG_SHW_INF 	4 	//查看个人信息
-#define LOG_CGE_PSW 	5 	//修改密码
-#define CGE_PSW_OK 		6 	//修改密码成功
-#define LOG_CGE_NAME 	7 	//修改名字
-#define CGE_NAME_OK 	8 	//修改名字成功
-#define LOG_CGE_YEAR 	9 	//修改年龄
-#define CGE_YEAR_OK  	10 	//修改年龄成功
-typedef struct
-{
-	char name[20];
-	char sex[10];
-	int year;
-	double salary;
-	char department[20];
-	double telephone;
-	char E_mail[30];
-	char address[100];
-	char history[50];
-}empinfo_t;
-
-typedef struct
-{
-	char username[20];
-	char userpsw[20];
-	empinfo_t info;
-}data_t;
-
-typedef struct
-{
-	int protocol;//命令位
-	data_t data;
-}DATA;
 
 
 struct sockaddr_in sockaddr;
@@ -91,18 +56,25 @@ int main(int argc, const char *argv[])
 
 	while(1)
 	{
+		int ret;
 		printf("员工管理系统\n");
 		memset(command,0,sizeof(DATA));
 		name_func(command->data.username);//判断输入的用户名是否合法
 		psw_func(command->data.userpsw);//判断输入的密码是否合法
 		command->protocol = CLI_LOGIN;//请求登录
-		
+		//判断是否是管理员
+		ret = strcmp("root",command->data.username);
+		ret += strcmp("root",command->data.userpsw);
+		if(ret == 0){
+			root_login_func(command,sockfd);		
+		}
 		//发送数据
 		ret = send(sockfd,command,sizeof(DATA),0);
 		if(ret < 0 ){
 			perror("client send error\n");
 			return -1;
 		}
+		//接收数据
 		memset(command,0,sizeof(DATA))；
 		ret = recv(sockfd,0,sizeof(DATA),0);
 		if(ret < 0){
