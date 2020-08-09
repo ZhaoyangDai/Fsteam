@@ -1,12 +1,3 @@
-#include <stdio.h>
-#include <sys/types.h> 
-#include <sys/socket.h>
-#include <errno.h>
-#include <netinet/in.h>
-#include <netinet/ip.h>
-
-#define BACKLOG 30
-#define DATABASE "emp_ctl.db"
 /**************************************
  *   员工管理服务器 v1.0
  *   开发者：石磊、代朝阳
@@ -15,41 +6,13 @@
  *
  *
  ***************************************/
-/*员工信息结构体*/
-int do_register(int newfd,data_t usrMsg,sqlite3 *db);
-int do_login(int newfd,data_t usrMsg,sqlite3 *db);
-
-typedef struct{
-	char name[20];
-	char sex[10];
-	int year;
-	double salary;
-	char department[20];
-	double telephone;
-	char E_mail[30];
-	char address[100];
-	char history[50];
-	char warn[50];
-}empinfo_t;
-
-/*帐号信息结构体*/
-typedef struct {
-	char usrname[20];
-	char usrpsw[20];
-	char usrerr[50];
-	empinfo_t info;
-}data_t;
-/*请求信息结构体*/
-typedef struct{
-	int protocol;
-	data_t data;
-}DATA;
+#include "server.h"
 
 /***********************************
  * 监听函数
- * 功能：通过接口监听
- * 参数：端口号
- *       监听数
+ * func:create socket and listen
+ * par: port
+ * 		backlog
  * 返回值：成功返回 0
  * 	 	   失败返回-1
  *
@@ -67,10 +30,10 @@ int listen_socket(const unsigned int port,int backlog ){
 	}
 
 	/*允许快速重用*/
-	if(0 != setsockopt(fd,SOL_SOCKET,SO_REUEsin,\
+	if(0 > setsockopt(fd,SOL_SOCKET,SO_REUSEADDR,\
 				(void *)&b_reuse,sizeof(int))){
 		perror("reuse error");
-		exit(1);
+		return -1;
 	}
 
 	/*填充地址信息结构体*/
@@ -81,15 +44,15 @@ int listen_socket(const unsigned int port,int backlog ){
 	};
 
 	/*绑定地址*/
-	if(0 !=  bind(fd,(struct sockaddr *)&sin,sizeof (sin))){
+	if(0 >  bind(fd,(struct sockaddr *)&sin,sizeof (sin))){
 		perror("bind error");
-		exit(1);
+		return -1;
 	}
 
 	/*监听*/
-	if(0 != listen(fd,BACKLOG)){
+	if(0 > listen(fd,BACKLOG)){
 		perror("listen error");
-		exit(1);
+		return -1;
 	}
 	printf("server begin work !\n");
 
@@ -102,12 +65,13 @@ int main(int argc, const char *argv[])
 	pid_t pid;
 	data_t usrMsg;
 	struct sockaddr_in cin;
+	int socklen = sizeof(cin);
 	int fd = -1;
 	int newfd = -1;
 	char *errmsg;
 
 	/*打开数据库,存在就打开，不存在就创建*/
-	if(sqlite3_open(DATABASE,&db) != SQLITEOK){
+	if(sqlite3_open(DATABASE,&db) != SQLITE_OK){
 		printf("%s\n",sqlite3_errmsg(db));
 		return -1;
 	}else{
@@ -116,23 +80,20 @@ int main(int argc, const char *argv[])
 
 	/*创建帐号数据表*/
 	if(sqlite3_exec(db,\
-				"create table if not exists usr_data
-		(usrname char primary key,usrpsw char);",\
-			NULL,NULL,&errmsg) != SQLITE_OK){
-				printf("%s\n",errmsg);
-			}else{
-				printf("Create or open emp_info table success.\n");
-			}
+				"create table if not exists usr_data(usrname char primary key,usrpsw char);",\
+				NULL,NULL,&errmsg) != SQLITE_OK){
+		printf("%s\n",errmsg);
+	}else{
+		printf("create or open emp_info table success.\n");
+	}
 	/*创建员工信息表*/
 	if(sqlite3_exec(db,\
-				"create table if not exists emp_info
-		(name char primary key,sex char,age int,salary double,department char,
-		 telephone double,E-mail char,address char,history char);",\
-			NULL,NULL,&errmsg) != SQLITE_OK){
-				printf("%s\n",errmsg);
-			}else{
-				printf("Create or open emp_info table success.\n");
-			}
+				"create table if not exists emp_info(name char primary key,sex char,age int,salary double,department char,telephone double,E-mail char,address char,history char);",\
+				NULL,NULL,&errmsg) != SQLITE_OK){
+		printf("%s\n",errmsg);
+	}else{
+		printf("Create or open emp_info table success.\n");
+	}
 
 	/*调用监听函数，监听服务器*/
 	fd = listen_socket(99999,BACKLOG);
@@ -145,10 +106,10 @@ int main(int argc, const char *argv[])
 	while(1)
 	{
 		/*接受客户端请求*/
-		newfd = accept(fd,(struct sockaddr *)&cin,sizeof(cin));
+		newfd = accept(fd,(struct sockaddr *)&cin,&socklen);
 		if(0 > newfd){
 			perror("accept error");
-			exit(1);
+			return -1;
 		}
 
 		if(0 > (pid = fork())){
@@ -159,7 +120,7 @@ int main(int argc, const char *argv[])
 			close(fd);
 			/*客户端连接信息*/
 			cli_info(cin);
-			cli_data_handle(&newfd);
+			cli_data_ctl(&newfd,db);
 			return 0;
 		}else{
 			/*子进程结束后父进程关闭newfd*/
@@ -170,26 +131,26 @@ int main(int argc, const char *argv[])
 	return 0;
 }
 
-/*接入客户端信息*/
-void client_info(struct socket_in cin)
+/*客户端状态信息*/
+void client_info(struct sockaddr_in cin)
 {
 	char ipv4_addr[16];
 	bzero(ipv4_addr,sizeof(ipv4_addr));
-	if(NULL = inet_ntop(AF_INET,(void*)&cin.sin_addr.s_addr,\
+	if(NULL == inet_ntop(AF_INET,(void*)&cin.sin_addr.s_addr,\
 				ipv4_addr,sizeof(ipv4_addr))){
 		perror("inet_ntop");
-		exit(1);
 	}
 	printf("客户端(%s:%d)已连接>\n",ipv4_addr,ntohs(cin.sin_port));
 }
 
 //数据操作函数
-void client_data_ctl(void *arg)
+int client_data_ctl(void *arg,sqlite3 *db)
 {
 	int newfd = *((int *)arg);
 	int ret = -1;
 	char buf[BUFSIZ] = {};
 	DATA *command;
+	
 	/***************************
 	 *判断客户端是否有数据传递
 	 *如果产生数据传递，执行接收
@@ -205,28 +166,28 @@ void client_data_ctl(void *arg)
 		printf("wait please...\n");
 		switch(command->protocol){
 		case 1:
-			usr_register(newfd,command->data,db);
+			usr_register(newfd,&command->data,db);
 			break;
 		case 2:
-			usr_login(newfd,command->data,db);
+			usr_login(newfd,&command->data,db);
 			break;
 		case 3:
-			emp_cat(newfd,command->data->info,db);
+			emp_cat(newfd,&command->data.info,db);
 			break;
 		case 4:
-			usr_update(newfd,command->data->info,db);
+			usr_update(newfd,&command->data.info,db);
 			break;
 		case 5:
-			usr_sistory(newfd,command->data->info,db);
+			usr_sistory(newfd,&command->data,db);
 			break;
 		case 6:
-			usr_change(newfd,command->data->info,db);
+			usr_change(newfd,&command->data,db);
 			break;
 		case 7:
-			emp_add(newfd,command->data->info,db);
+			emp_add(newfd,&command->data.info,db);
 			break;
 		case 8:
-			emp_remove(newfd,command->data->info,db);
+			emp_remove(newfd,&command->data.info,db);
 			break;
 
 		default:
@@ -235,7 +196,7 @@ void client_data_ctl(void *arg)
 	}
 
 	/*发送数据到客户端*/
-	if(0 >= send(rwfd,buf,sizeof(buf),0)){
+	if(0 >= send(newfd,buf,sizeof(buf),0)){
 		perror("send error");
 		return -1;
 	}
@@ -270,14 +231,15 @@ int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
 {
 	char *errmsg;
 	char sql[300];
+
 	/*查找用户名和查找密码*/
-	sprintf(sql,"select * from usr_data where usrname='%s',usrpsw=%d;",\
+	sprintf(sql,"select * from usr_data where usrname='%s',usrpsw=%s;",\
 			usrMsg->usrname,usrMsg->usrpsw);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(usrMsg->usrerr,"user is no find.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
@@ -295,12 +257,14 @@ int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
 /*查看员工信息*/
 int emp_cat(int newfd,empinfo_t *empMsg,sqlite3 *db){
 	char sql[300] = {};
-	sprintf(sql,"select * from emp_info where name='%s';",empMsg->usrname);
-	if(sqlite3_exec(newfd,sql,NULL,NULL,&errmsg) != SQLITE_OK){
+	char *errmsg;
+
+	sprintf(sql,"select * from emp_info where name='%s';",empMsg->name);
+	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(empMsg->warn,"get message error.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
@@ -309,13 +273,15 @@ int emp_cat(int newfd,empinfo_t *empMsg,sqlite3 *db){
 int emp_update(int newfd,empinfo_t *empMsg,sqlite3 *db)
 {
 	char sql[300] = {};
-	sprintf(sql,"update emp_info set usrpsw='%s' where name='%s';",\
-			empMsg->salary,empMsg->name);
+	char *errmsg;
+
+	sprintf(sql,"update emp_info set %s='%s' where name='%s';",\
+			empMsg->tag,empMsg->newdata,empMsg->name);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(empMsg->warn,"message update error.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
@@ -324,28 +290,33 @@ int emp_update(int newfd,empinfo_t *empMsg,sqlite3 *db)
 int usr_sistory(int newfd,data_t *usrMsg,sqlite3 *db)
 {
 	char sql[300] = {};
-	sprintf(sql,"select * from usr_data where usrname=%s,usrpsw=%d;",\
-			usrMsg->usrname,usrMsg->usrpsw);
-	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
+	char *errmsg;
+
+	sprintf(sql,"select * from record where name='%s'",\
+			usrMsg->history);
+	if(sqlite3_exec(db,sql,history_callback,(void *)&newfd,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(usrMsg->usrerr,"get sistory error.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
+	//send(newfd,,sizeof());
 	return 0;
 }
-
+/*忘记密码*/
 /*修改账户密码*/
 int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
 {
 	char sql[300] = {};
+	char *errmsg;
+
 	sprintf(sql,"update usr_data  set usrpsw='%s' where usrname='%s';",\
 			usrMsg->usrpsw,usrMsg->usrname);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(usrMsg->usrerr,"password changed fail.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
@@ -354,8 +325,9 @@ int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
 int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db)
 {
 	char sql[300] = {};
-	sprintf(sql,"insert into emp_info 
-			VALUES('%s','%s',%d,%d,%d,'%s','%s','%s','%s','%s');",\
+	char *errmsg;
+
+	sprintf(sql,"insert into emp_info VALUES('%s','%s',%d,%d,%.2f,'%s','%s','%s','%s','%s');",\
 			empMsg->name,empMsg->sex,empMsg->age,empMsg->year,\
 			empMsg->salary,empMsg->department,empMsg->telephone,\
 			empMsg->E_mail,empMsg->address,empMsg->history);
@@ -363,7 +335,7 @@ int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db)
 		printf("%s\n",errmsg);
 		strcpy(empMsg->warn,"employee is already exists.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
@@ -371,24 +343,28 @@ int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db)
 int emp_remove(int newfd,empinfo_t *empMsg,sqlite3 *db)
 {
 	char sql[300] = {};
+	char *errmsg;
+
 	sprintf(sql,"delete from emp_info where usrname='%s';",empMsg->name);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK){
 		printf("%s\n",errmsg);
 		strcpy(empMsg->warn,"employee removed fail.");
 	}else{
-		printf("success");
+		printf("execute successfully!");
 	}
 	return 0;
 }
 
+/*历史查询回调函数*/
+int history_callback(void *arg,int f_num,char**f_value,char**f_name)
+{
+	int newfd;
+	data_t msg;
 
-/*****************************
- * 密码修改
- * 1.查找用户名
- * 2.查找验证信息
- * 3.更新密码
- * 4.反馈结果给客户端
- * **************************/
+	newfd = *((int *)arg);
+	sprintf(msg.history,"%s,%s",f_value[1],f_value[2]);
+	send(newfd,&msg,sizeof(data_t),0);
+	return 0;
+}
 
-usrdate;
 
