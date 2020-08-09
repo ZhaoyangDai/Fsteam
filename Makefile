@@ -18,6 +18,8 @@ $(SRC_DIR)/%.o:$(SRC_DIR)/%.c
 %.o:%.c
 	$(CC) $(CFLAGS) $@ $< -I ./include/ 
 
+.PHONY:clean
+
 clean:
 	rm *.o $(TARGET) $(SRC_DIR)/*.o
 

@@ -9,12 +9,13 @@ int emp_cat(int newfd,empinfo_t *empMsg,sqlite3 *db)
 	char *errmsg;
 
 	sprintf(sql,"select * from emp_info where name='%s';",empMsg->name);
-	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
+	if(sqlite3_get_table(db,sql,&restp,&nrow,&ncloumn,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
 		strcpy(empMsg->warn,"get message error.");
 	}else{
 		printf("execute successfully!");
+		strcpy(empMsg->warn,"employee cat success.");
 	}
 	return 0;
 }
@@ -35,6 +36,7 @@ int emp_update(int newfd,empinfo_t *empMsg,sqlite3 *db)
 		strcpy(empMsg->warn,"message update error.");
 	}else{
 		printf("execute successfully!");
+		strcpy(empMsg->warn,"employee update success.");
 	}
 	return 0;
 }
@@ -57,6 +59,7 @@ int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db)
 		strcpy(empMsg->warn,"employee is already exists.");
 	}else{
 		printf("execute successfully!");
+		strcpy(empMsg->warn,"employee insert success.");
 	}
 	return 0;
 }
@@ -76,20 +79,9 @@ int emp_remove(int newfd,empinfo_t *empMsg,sqlite3 *db)
 		strcpy(empMsg->warn,"employee removed fail.");
 	}else{
 		printf("execute successfully!");
+		strcpy(empMsg->warn,"employee delete success.");
 	}
 	return 0;
 }
 
-/*****************************
- *历史查询回调函数
- ****************************/
-int history_callback(void *arg,int f_num,char**f_value,char**f_name)
-{
-	data_t msg;
-	int newfd;
 
-	newfd = *((int *)arg);
-	sprintf(msg.history,"%s,%s",f_value[1],f_value[2]);
-	send(newfd,&msg,sizeof(data_t),0);
-	return 0;
-}

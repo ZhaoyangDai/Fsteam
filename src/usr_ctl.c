@@ -19,6 +19,7 @@ int usr_register(int newfd,data_t *usrMsg,sqlite3*db)
 		strcpy(usrMsg->usrerr,"user is exist.");
 	}else{
 		printf("client register success.");
+		strcpy(usrMsg->usrerr,"register success.");
 	}
 	return 0;
 }
@@ -40,6 +41,28 @@ int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
 		strcpy(usrMsg->usrerr,"user is no find.");
 	}else{
 		printf("execute successfully!");
+		strcpy(usrMsg->usrerr,"longin success.");
+	}
+	return 0;
+}
+
+/******************************
+ * 忘记密码/修改账户密码
+ * ***************************/
+int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
+{
+	char sql[300] = {};
+	char *errmsg;
+
+	sprintf(sql,"update usr_data  set usrpsw='%s' where usrname='%s';",\
+			usrMsg->usrpsw,usrMsg->usrname);
+	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
+	{
+		printf("%s\n",errmsg);
+		strcpy(usrMsg->usrerr,"password changed fail.");
+	}else{
+		printf("execute successfully!");
+		strcpy(usrMsg->usrerr,"password changed success.");
 	}
 	return 0;
 }
@@ -61,28 +84,22 @@ int usr_sistory(int newfd,data_t *usrMsg,sqlite3 *db)
 		strcpy(usrMsg->usrerr,"get sistory error.");
 	}else{
 		printf("execute successfully!");
+		strcpy(usrMsg->usrerr,"get history success.");
 	}
 	//send(newfd,,sizeof());
 	return 0;
 }
 
-/******************************
- * 忘记密码
- *修改账户密码
- * ***************************/
-int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
+/*****************************
+ *历史查询回调函数
+ ****************************/
+int history_callback(void *arg,int f_num,char**f_value,char**f_name)
 {
-	char sql[300] = {};
-	char *errmsg;
+	data_t msg;
+	int newfd;
 
-	sprintf(sql,"update usr_data  set usrpsw='%s' where usrname='%s';",\
-			usrMsg->usrpsw,usrMsg->usrname);
-	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
-	{
-		printf("%s\n",errmsg);
-		strcpy(usrMsg->usrerr,"password changed fail.");
-	}else{
-		printf("execute successfully!");
-	}
+	newfd = *((int *)arg);
+	sprintf(msg.history,"%s,%s",f_value[1],f_value[2]);
+	send(newfd,&msg,sizeof(data_t),0);
 	return 0;
 }
