@@ -16,11 +16,13 @@ int usr_register(int newfd,data_t *usrMsg,sqlite3*db)
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(usrMsg->usrerr,"user is exist.");
+		strcpy(usrMsg->info.warn,"user is exist.");
 	}else{
 		printf("client register success.");
-		strcpy(usrMsg->usrerr,"register success.");
+		strcpy(usrMsg->info.warn,"register success.");
 	}
+	usrMsg->info.retcli = 1;
+	send(newfd,&usrMsg,sizeof(data_t),0);
 	return 0;
 }
 
@@ -38,11 +40,13 @@ int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(usrMsg->usrerr,"user is no find.");
+		strcpy(usrMsg->info.warn,"user is no find.");
 	}else{
 		printf("execute successfully!");
-		strcpy(usrMsg->usrerr,"longin success.");
+		strcpy(usrMsg->info.warn,"longin success.");
 	}
+	usrMsg->info.retcli = 1;
+	send(newfd,&usrMsg,sizeof(data_t),0);
 	return 0;
 }
 
@@ -59,11 +63,13 @@ int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(usrMsg->usrerr,"password changed fail.");
+		strcpy(usrMsg->info.warn,"password changed fail.");
 	}else{
 		printf("execute successfully!");
-		strcpy(usrMsg->usrerr,"password changed success.");
+		strcpy(usrMsg->info.warn,"password changed success.");
 	}
+	usrMsg->info.retcli = 1;
+	send(newfd,&usrMsg,sizeof(data_t),0);
 	return 0;
 }
 
@@ -81,12 +87,14 @@ int usr_sistory(int newfd,data_t *usrMsg,sqlite3 *db)
 				(void *)&newfd,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(usrMsg->usrerr,"get sistory error.");
+		strcpy(usrMsg->info.warn,"get sistory error.");
 	}else{
 		printf("execute successfully!");
-		strcpy(usrMsg->usrerr,"get history success.");
+		strcpy(usrMsg->info.warn,"get history success.");
 	}
-	//send(newfd,,sizeof());
+	usrMsg->history[0] = '\0';
+	usrMsg->info.retcli = 1;
+	send(newfd,usrMsg,sizeof(data_t),0);
 	return 0;
 }
 

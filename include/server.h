@@ -18,28 +18,27 @@
 
 /*员工信息结构体*/
 typedef struct{
-	char name[20];
-	char sex[10];
-	int age;
-	int year;
-	double salary;
-	char department[20];
-	char telephone[20];
-	char E_mail[30];
-	char address[100];
-	char history[50];
-	char warn[50];
-	char tag[50];
-	char newdata[50];
+	int retcli; 	/*服务器返回指令*/
+	char name[20]; 	/*姓名*/
+	char sex[10]; 	/*性别*/
+	int age; 		/*年龄*/
+	int year; 		/*工龄*/
+	double salary; 	/*薪资*/
+	char department[20];/*部门*/
+	char telephone[20]; /*电话*/
+	char E_mail[30]; 	/*邮箱*/
+	char address[100]; 	/*住址*/
+	char warn[50]; 		/*服务器返回信息*/
+	char tag[50]; 		/*客户端修改目标*/
+	char newdata[50]; 	/*客户端更改值*/
 }empinfo_t;
 
 /*帐号信息结构体*/
 typedef struct {
-	char usrname[20];
-	char usrpsw[20];
-	char usrerr[50];
-	char history[100];
-	empinfo_t info;
+	char usrname[20]; 	/*用户名*/
+	char usrpsw[20]; 	/*用户密码*/
+	char history[100]; 	/*操作历史*/
+	empinfo_t info; 
 }data_t;
 
 /*请求信息结构体*/

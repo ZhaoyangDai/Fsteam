@@ -157,7 +157,7 @@ void client_info(struct sockaddr_in cin)
 	printf("客户端(%s:%d)已连接>\n",ipv4_addr,ntohs(cin.sin_port));
 }
 
-/*数据操作函数*/
+/*客户端请求处理*/
 int client_data_ctl(void *arg,sqlite3 *db)
 {
 	DATA *command;
@@ -209,13 +209,6 @@ int client_data_ctl(void *arg,sqlite3 *db)
 		default:
 			printf("Invalid data msg.\n");
 		}
-	}
-
-	/*发送数据到客户端*/
-	if(0 >= send(newfd,buf,sizeof(buf),0))
-	{
-		perror("send error");
-		return -1;
 	}
 }
 
