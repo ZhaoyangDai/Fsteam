@@ -7,7 +7,6 @@
  *
  ***************************************/
 #include "server.h"
-
 /***********************************
  * 监听函数
  * func:create socket and listen
@@ -119,8 +118,8 @@ int main(int argc, const char *argv[])
 			/*子进程不需要使用fd*/
 			close(fd);
 			/*客户端连接信息*/
-			cli_info(cin);
-			cli_data_ctl(&newfd,db);
+			client_info(cin);
+			client_data_ctl(&newfd,db);
 			return 0;
 		}else{
 			/*子进程结束后父进程关闭newfd*/
@@ -175,7 +174,7 @@ int client_data_ctl(void *arg,sqlite3 *db)
 			emp_cat(newfd,&command->data.info,db);
 			break;
 		case 4:
-			usr_update(newfd,&command->data.info,db);
+			emp_update(newfd,&command->data.info,db);
 			break;
 		case 5:
 			usr_sistory(newfd,&command->data,db);

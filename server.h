@@ -2,15 +2,16 @@
 #define __SERVER_H__
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <sys/types.h> 
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
-#include <sqlite3.h>
 #include <string.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <wait.h>
+#include <sqlite3.h>
 
 #define BACKLOG 30
 #define DATABASE "emp_ctl.db"
@@ -63,6 +64,5 @@ int usr_change(int newfd,data_t *usrMsg,sqlite3 *db);
 int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db);
 int emp_remove(int newfd,empinfo_t *empMsg,sqlite3 *db);
 int history_callback(void *arg,int f_num,char**f_value,char**f_name);
-
 
 #endif //__SERVER_H__
