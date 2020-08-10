@@ -24,7 +24,7 @@ void show_info_func(DATA *command,int sockfd)
 	printf("工号：%d\n",command->data.info.number);
 	printf("工资：%lf\n",command->data.info.salary);
 	printf("部门：%s\n",command->data.info.department);
-	printf("电话：%lf\n",command->data.info.telephone);
+	printf("电话：%s\n",command->data.info.telephone);
 	printf("邮箱：%s\n",command->data.info.E_mail);
 	printf("地址：%s\n",command->data.info.address);
 }
@@ -55,7 +55,7 @@ void root_info_func(DATA *command,int sockfd)
 	printf("工号：%d\n",command->data.info.number);
 	printf("工资：%lf\n",command->data.info.salary);
 	printf("部门：%s\n",command->data.info.department);
-	printf("电话：%lf\n",command->data.info.telephone);
+	printf("电话：%s\n",command->data.info.telephone);
 	printf("邮箱：%s\n",command->data.info.E_mail);
 	printf("地址：%s\n",command->data.info.address);
 }

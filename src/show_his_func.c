@@ -17,7 +17,7 @@ void show_his_func(DATA *command,int sockfd)
 		perror("show_info_func recv error\n");
 		exit(1);
 	}else{
-		printf("登录时间：%s\n",command->data.info.history);
+		printf("登录时间：%s\n",command->data.history);
 	}
 }
 
@@ -27,7 +27,7 @@ void root_his_func(DATA *command,int sockfd)
 	//发送标志位：显示历史信息
 	command->protocol = LOG_SHW_HIS;
 	printf("请输入要查询的工号：\n");
-	scanf("%lf\n",command->data.info.number);
+	scanf("%d\n",command->data.info.number);
 	ret = send(sockfd,command,sizeof(DATA),0);  
 	if(ret < 0){
 		perror("show_his_func send is error\n");
@@ -40,6 +40,6 @@ void root_his_func(DATA *command,int sockfd)
 		perror("show_info_func recv error\n");
 		exit(1);
 	}else{
-		printf("登录时间：%s\n",command->data.info.history);
+		printf("登录时间：%s\n",command->data.history);
 	}
 }

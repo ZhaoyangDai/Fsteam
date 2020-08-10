@@ -65,7 +65,7 @@ void cge_tele_func(DATA *command,int sockfd)
 	command->protocol = LOG_CGE_TELE;
 	//获取修改的电话
 	printf("请输入电话：\n");
-	scanf("%lf\n",&command->data.info.telephone);
+	scanf("%s\n",&command->data.info.telephone);
 	getchar();
 	//发送信息结构体
 	ret = send(sockfd,command,sizeof(DATA),0);

@@ -48,19 +48,23 @@ typedef struct
 	char name[20];
 	char sex[10];
 	int age;
+	int year;
 	int number;
 	double salary;
 	char department[20];
-	double telephone;
+	char telephone[20];
 	char E_mail[30];
 	char address[100];
-	char history[50];
+	char warn[50];
+	char tag[50];
+	char newdata[50];
 }empinfo_t;
 
 typedef struct
 {
 	char username[20];
 	char userpsw[20];
+	char history[100];
 	empinfo_t info;
 }data_t;
 
