@@ -121,13 +121,15 @@ int main(int argc, const char *argv[])
 			perror("accept error");
 			return -1;
 		}
-
+		printf("accept ok\n");
 		if(0 > (pid = fork()))
 		{
+			printf("父进程\n");
 			perror("fork create error");
 			return -1;
 		}else if(pid == 0)
 		{
+			printf("子进程\n");
 			/*子进程不需要使用fd*/
 			close(fd);
 			/*客户端连接信息*/
