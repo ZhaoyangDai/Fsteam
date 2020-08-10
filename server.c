@@ -86,7 +86,7 @@ int main(int argc, const char *argv[])
 
 	/*创建帐号数据表*/
 	if(sqlite3_exec(db,\
-				"create table if not exists usr_data(usrname char primary key,usrpsw char);",\
+				"create table if not exists usr_data(id int primary key,usrname char,usrpsw char);",\
 				NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("create usr_data >%s\n",errmsg);
@@ -96,7 +96,7 @@ int main(int argc, const char *argv[])
 
 	/*创建员工信息表*/
 	if(sqlite3_exec(db,\
-				"create table if not exists emp_info(name char primary key,sex text,age int,year int,salary text,department text,telephone text,E_mail text,address text,history text);",\
+				"create table if not exists emp_info(id int primary key,name char,sex text,age int,year int,salary text,department text,telephone text,E_mail text,address text,history text);",\
 				NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("create emp_info >%s\n",errmsg);

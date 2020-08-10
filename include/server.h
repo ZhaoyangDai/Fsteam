@@ -22,7 +22,7 @@ typedef struct{
 	char name[20]; 	/*姓名*/
 	char sex[10]; 	/*性别*/
 	int age; 		/*年龄*/
-	int year; 		/*工龄*/
+	int num; 		/*工龄*/
 	double salary; 	/*薪资*/
 	char department[20];/*部门*/
 	char telephone[20]; /*电话*/

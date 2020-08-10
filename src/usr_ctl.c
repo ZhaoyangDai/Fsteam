@@ -5,13 +5,17 @@
  * ***************************/
 int usr_register(int newfd,data_t *usrMsg,sqlite3*db)
 {
+	DATA *command;
 	int ret = -1;
 	char sql[300];
 	char * errmsg;
 
+
+	memset(command,0,sizeof(DATA));
+	recv(newfd,command,sizeof(DATA),0);
 	/*添加用户名、密码到用户数据表中*/
-	sprintf(sql,"insert into usr_data values('%s','%s');",\
-			usrMsg->usrname,usrMsg->usrpsw);
+	sprintf(sql,"insert into usr_data values('%s','%s','%d');",\
+			usrMsg->usrname,usrMsg->usrpsw,usrMsg->info.num);
 	/*验证用户名是否存在*/
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
@@ -31,9 +35,12 @@ int usr_register(int newfd,data_t *usrMsg,sqlite3*db)
  * ***************************/
 int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
 {
+	DATA *command;
 	char sql[300];
 	char *errmsg;
 
+	memset(command,0,sizeof(DATA));
+	recv(newfd,command,sizeof(DATA),0);
 	/*查找用户名和查找密码*/
 	sprintf(sql,"select * from usr_data where usrname='%s',usrpsw=%s;",\
 			usrMsg->usrname,usrMsg->usrpsw);
@@ -55,9 +62,12 @@ int usr_login(int newfd,data_t *usrMsg,sqlite3 *db)
  * ***************************/
 int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
 {
+	DATA *command;
 	char sql[300] = {};
 	char *errmsg;
 
+	memset(command,0,sizeof(DATA));
+	recv(newfd,command,sizeof(DATA),0);
 	sprintf(sql,"update usr_data  set usrpsw='%s' where usrname='%s';",\
 			usrMsg->usrpsw,usrMsg->usrname);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
@@ -78,9 +88,12 @@ int usr_change(int newfd,data_t *usrMsg,sqlite3 *db)
  * ***************************/
 int usr_sistory(int newfd,data_t *usrMsg,sqlite3 *db)
 {
+	DATA *command;
 	char sql[300] = {};
 	char *errmsg;
 
+	memset(command,0,sizeof(DATA));
+	recv(newfd,command,sizeof(DATA),0);
 	sprintf(sql,"select * from record where name='%s'",\
 			usrMsg->history);
 	if(sqlite3_exec(db,sql,history_callback,\
@@ -103,9 +116,12 @@ int usr_sistory(int newfd,data_t *usrMsg,sqlite3 *db)
  ****************************/
 int history_callback(void *arg,int f_num,char**f_value,char**f_name)
 {
+	DATA *command;
 	data_t msg;
 	int newfd;
 
+	memset(command,0,sizeof(DATA));
+	recv(newfd,command,sizeof(DATA),0);
 	newfd = *((int *)arg);
 	sprintf(msg.history,"%s,%s",f_value[1],f_value[2]);
 	send(newfd,&msg,sizeof(data_t),0);
