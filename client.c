@@ -16,22 +16,6 @@ struct sockaddr_in sockaddr;
  *2.初始化客户端与服务器连接函数
  *
  */
-int net(void)
-{
-	int sockfd,ret;
-	//创建网络套接字
-	if((sockfd = socket(AF_INET, SOCK_STREAM, 0) < 0)){
-		perror("socket is error\n");
-		return -1;
-	}
-	//连接服务器
-	ret = connect(sockfd, (struct sockaddr *)&sockaddr,sizeof(sockaddr));
-	if(ret < 0){
-		perror("connect is error\n");
-		return -1;
-	}
-	return sockfd;
-}
 
 
 int main(int argc, const char *argv[])
@@ -49,13 +33,23 @@ int main(int argc, const char *argv[])
 		printf("%s server ip\n",argv[0]);
 		return -1;
 	}
+	//创建网络套接字
+	if((sockfd = socket(AF_INET, SOCK_STREAM, 0) < 0)){
+		perror("socket is error\n");
+		return -1;
+	}
 	//清零结构体
 	memset(&sockaddr,0,sizeof(sockaddr));
 	sockaddr.sin_family = AF_INET;
 	sockaddr.sin_addr.s_addr = inet_addr(argv[1]);
 	sockaddr.sin_port = htons(atoi(argv[2]));
 
-	sockfd = net();
+	//连接服务器
+	ret = connect(sockfd, (struct sockaddr *)&sockaddr,sizeof(sockaddr));
+	if(ret < 0){
+		perror("connect is error\n");
+		return -1;
+	}
 
 	while(1)
 	{

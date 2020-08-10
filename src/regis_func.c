@@ -7,14 +7,11 @@ void regis_func(DATA *command,int sockfd)
 	name_func(command->data.username);//判断输入的用户名是否合法
 	psw_func(command->data.userpsw);//判断输入的密码是否合法
 	printf("请输入名字：\n");
-	scanf("%s\n",&command->data.info.name);
-	getchar();
+	scanf(" %s\n",&command->data.info.name);
 	printf("请输入年龄：\n");
-	scanf("%d\n",&command->data.info.age);
-	getchar();
+	scanf(" %d\n",&command->data.info.age);
 	printf("请输入性别：(man,woman)\n");
-	scanf("%s\n",&command->data.info.sex);
-	getchar();
+	scanf(" %s\n",&command->data.info.sex);
 
 	//发送数据
 	ret = send(sockfd,command,sizeof(DATA),0);
