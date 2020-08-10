@@ -70,7 +70,7 @@ int main(int argc, const char *argv[])
 	sqlite3 *db;
 	data_t usrMsg;
 	struct sockaddr_in cin;
-	int socklen = sizeof(cin);
+	socklen_t addrlen = sizeof(cin);
 	int fd = -1;
 	int newfd = -1;
 	char *errmsg;
@@ -116,7 +116,7 @@ int main(int argc, const char *argv[])
 	while(1)
 	{
 		/*接受客户端请求*/
-		newfd = accept(fd,(struct sockaddr *)&cin,&socklen);
+		newfd = accept(fd,(struct sockaddr *)&cin,&addrlen);
 		if(0 > newfd){
 			perror("accept error");
 			return -1;

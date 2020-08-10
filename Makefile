@@ -10,7 +10,7 @@ OBJSs += $(wildcard *.c)
 OBJS := $(patsubst %.c,%.o,$(OBJSs))
 
 all:$(OBJS)
-	$(CC) $^ -o $(TARGET) $(SQL)
+	$(CC) $^ -o $(TARGET) $(SQL) -Wall
 
 $(SRC_DIR)/%.o:$(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $@  $< -I ./include/ 
