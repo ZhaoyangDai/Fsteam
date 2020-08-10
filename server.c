@@ -91,7 +91,7 @@ int main(int argc, const char *argv[])
 	{
 		printf("create usr_data >%s\n",errmsg);
 	}else{
-		printf("create or open emp_info table success.\n");
+		printf("create or open usr_data table success.\n");
 	}
 
 	/*创建员工信息表*/
