@@ -182,29 +182,29 @@ int client_data_ctl(void *arg,sqlite3 *db)
 		printf("wait please...\n");
 		switch(command->protocol)
 		{
-		case 1:
-			usr_register(newfd,&command->data,db);
-			break;
 		case 2:
-			usr_login(newfd,&command->data,db);
+			usr_register(newfd,&command->data,db); //用户注册
+			break;
+		case 1:
+			usr_login(newfd,&command->data,db); //用户登录
 			break;
 		case 3:
-			emp_cat(newfd,&command->data.info,db);
-			break;
-		case 4:
-			emp_update(newfd,&command->data.info,db);
-			break;
-		case 5:
-			usr_sistory(newfd,&command->data,db);
+			emp_cat(newfd,&command->data.info,db); //查看员工信息
 			break;
 		case 6:
-			usr_change(newfd,&command->data,db);
+			emp_update(newfd,&command->data.info,db); //更新员工信息
+			break;
+		case 4:
+			usr_sistory(newfd,&command->data,db); //查看用户操作历史
+			break;
+		case 5:
+			usr_change(newfd,&command->data,db); //更改用户密码
 			break;
 		case 7:
-			emp_add(newfd,&command->data.info,db);
+			emp_add(newfd,&command->data.info,db); //添加员工信息
 			break;
 		case 8:
-			emp_remove(newfd,&command->data.info,db);
+			emp_remove(newfd,&command->data.info,db); //删除员工信息
 			break;
 		default:
 			printf("Invalid data msg.\n");
