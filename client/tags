@@ -1,0 +1,56 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADD_USER	include/client.h	22;"	d
+CC	Makefile	/^CC := gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS := -c -o$/;"	m
+CGE_PSW	include/client.h	31;"	d
+CGE_SUC	include/client.h	29;"	d
+CGE_USER	include/client.h	24;"	d
+CHECK_OK	include/client.h	20;"	d
+DELE_SUC	include/client.h	28;"	d
+DELE_USER	include/client.h	23;"	d
+ERROR	include/client.h	32;"	d
+FIND	include/client.h	15;"	d
+INQ_HIS	include/client.h	26;"	d
+INQ_INFO	include/client.h	25;"	d
+LOGIN	include/client.h	14;"	d
+LOGIN_SUC	include/client.h	19;"	d
+MSG	include/client.h	/^}MSG;$/;"	t	typeref:struct:__anon1
+OBJS	Makefile	/^OBJS := $(patsubst %.c,%.o,$(OBJSs))$/;"	m
+OBJSs	Makefile	/^OBJSs := $(wildcard $(SRC_DIR)\/*.c)$/;"	m
+QUIT	include/client.h	16;"	d
+REGISTER	include/client.h	13;"	d
+REG_SUC	include/client.h	18;"	d
+SRC_DIR	Makefile	/^SRC_DIR = .\/src$/;"	m
+TARGET	Makefile	/^TARGET ?= clientAPP$/;"	m
+__CLIENT_H__	include/client.h	2;"	d
+add_user	src/add_user.c	/^void add_user(int socketfd,MSG *msg)$/;"	f
+addr	include/client.h	/^	char addr[50];$/;"	m	struct:__anon1
+age	include/client.h	/^	int  age;$/;"	m	struct:__anon1
+cge_psw	src/cge_psw.c	/^void cge_psw(int socketfd,MSG *msg)$/;"	f
+cge_user	src/cge_user.c	/^void cge_user(int socketfd,MSG *msg)$/;"	f
+dele_user	src/dele_user.c	/^void dele_user(int socketfd,MSG *msg)$/;"	f
+find_psw	src/find_psw.c	/^void find_psw(int socketfd, MSG *msg)$/;"	f
+flags	include/client.h	/^	int flags[2];      	\/\/用于传送命令$/;"	m	struct:__anon1
+id	include/client.h	/^	int  id;             	\/\/员工的编号                                                                                                                                   $/;"	m	struct:__anon1
+inq_his	src/inq_his.c	/^void inq_his(int socketfd,MSG *msg)$/;"	f
+inq_info	src/inq_info.c	/^void inq_info(int socketfd, MSG *msg)$/;"	f
+login_func	src/login_func.c	/^void login_func(int socketfd,MSG *msg)$/;"	f
+login_root	src/login_root.c	/^void login_root(int socketfd,MSG *msg)$/;"	f
+login_user	src/login_user.c	/^void login_user(int socketfd,MSG *msg)$/;"	f
+main	client.c	/^int main(int argc, const char *argv[])$/;"	f
+msg	include/client.h	/^MSG msg;$/;"	v
+name	include/client.h	/^	char name[20]; 			\/\/员工姓名$/;"	m	struct:__anon1
+net_init	src/net_init.c	/^void net_init(const char *argv[])$/;"	f
+passwd	include/client.h	/^	char passwd[20]; 		\/\/密码$/;"	m	struct:__anon1
+phone	include/client.h	/^	char phone[11];$/;"	m	struct:__anon1
+register_func	src/register_func.c	/^void register_func(int socketfd,MSG *msg)$/;"	f
+serveraddr	include/client.h	/^struct sockaddr_in serveraddr; 		\/\/网络信息结构体$/;"	v	typeref:struct:sockaddr_in
+sex	include/client.h	/^	char sex[10];$/;"	m	struct:__anon1
+socketfd	include/client.h	/^int socketfd; 		\/\/网络套接字$/;"	v
+type	include/client.h	/^	int type[2];$/;"	m	struct:__anon1
+username	include/client.h	/^	char username[20]; 		\/\/用户名$/;"	m	struct:__anon1
