@@ -10,7 +10,7 @@ OBJSs += $(wildcard *.c)
 OBJS := $(patsubst %.c,%.o,$(OBJSs))
 
 all:$(OBJS)
-	$(CC) $^ -o $(TARGET) $(SQL)
+	$(CC) $^ -o $(TARGET) $(SQL) -Wall
 
 $(SRC_DIR)/%.o:$(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $@  $< -I ./include/ 
@@ -21,5 +21,5 @@ $(SRC_DIR)/%.o:$(SRC_DIR)/%.c
 .PHONY:clean
 
 clean:
-	rm *.o $(TARGET) $(SRC_DIR)/*.o
+	rm *.o $(TARGET) $(SRC_DIR)/*.o *.db
 

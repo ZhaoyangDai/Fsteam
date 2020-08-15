@@ -1,130 +1,142 @@
 #include "server.h"
 
-/*****************************
- *添加员工
- ****************************/
-int emp_add(int newfd,empinfo_t *empMsg,sqlite3 *db)
+/*********************************************************
+ * Function Name  : emp_remove
+ * Description    : base on employee id to rm employee
+ * Input          : accept socket , MSG 
+ * Output         : None
+ * Return         : None
+ * *******************************************************/
+void emp_remove(int newfd,MSG *usrMsg)
 {
+	int ret = -1;
 	char sql[300] = {};
-	char *errmsg;
-	sprintf(sql,"insert into emp_info VALUES('%s','%s',%d,%d,%.2f,'%s','%s','%s','%s');",\
-			empMsg->name,empMsg->sex,empMsg->age,empMsg->num,\
-			empMsg->salary,empMsg->department,empMsg->telephone,\
-			empMsg->E_mail,empMsg->address);
-	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
+
+	/*验证用户是否存在*/
+	sprintf(sql,"select * from usr_data where id=%d;",usrMsg->id);
+	if(sqlite3_get_table(db,sql,&resultp,&nrow,&ncloumn,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(empMsg->warn,"employee is already exists.");
 	}else{
-		printf("execute successfully!");
-		strcpy(empMsg->warn,"employee insert success.");
+		printf("user message search over.\n");
 	}
-	empMsg->retcli = 1;
-	send(newfd,&empMsg,sizeof(empinfo_t),0);
-	return 0;
+
+	if(nrow >= 1)
+	{
+		/*从员工信息表中删除数据*/
+		sprintf(sql,"delete from usr_data where id=%d;",usrMsg->id);
+		if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
+		{
+			usrMsg->flags[0] = ERROR;
+			send(newfd,usrMsg,sizeof(MSG),0);
+			printf("%s\n",errmsg);
+		}else{
+			usrMsg->flags[0] = DELE_SUC;
+			send(newfd,usrMsg,sizeof(MSG),0);
+			printf("delete msg successfully!\n");
+		}
+	}
+	if(nrow == 0){
+		usrMsg->flags[0] = ERROR;
+		send(newfd,usrMsg,sizeof(MSG),0);
+		printf("usr is not exist!\n");	
+	}
 }
 
-/*****************************
- *删除员工
- ****************************/
-int emp_remove(int newfd,empinfo_t *empMsg,sqlite3 *db)
+/*********************************************************
+ * Function Name  : emp_cat
+ * Description    : base on employee id to get data
+ * Input          : accept socket , MSG 
+ * Output         : None
+ * Return         : None
+ * *******************************************************/
+void emp_cat(int newfd,MSG *usrMsg)
 {
 	char sql[300] = {};
-	char *errmsg;
 
-	sprintf(sql,"delete from emp_info where usrname='%s';",empMsg->name);
-	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
+	recv(newfd,usrMsg,sizeof(MSG),0);
+
+	sprintf(sql,"select * from emp_data where id=%d;",usrMsg->id);
+	if(sqlite3_get_table(db,sql,&resultp,&nrow,&ncloumn,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(empMsg->warn,"employee removed fail.");
 	}else{
-		printf("execute successfully!");
-		strcpy(empMsg->warn,"employee delete success.");
+		printf("msg cat successfully!\n");
 	}
-	empMsg->retcli = 1;
-	send(newfd,&empMsg,sizeof(empinfo_t),0);
-	return 0;
-}
 
-/*****************************
- *查看员工信息
- ****************************/
-int emp_cat(int newfd,empinfo_t *empMsg,sqlite3 *db)
-{
-	int nrow;
-	int ncloumn;
-	char sql[300] = {};
-	char *errmsg;
-	char **restp;
-
-	sprintf(sql,"select * from emp_info where name='%s';",empMsg->name);
-	if(sqlite3_get_table(db,sql,&restp,&nrow,&ncloumn,&errmsg) != SQLITE_OK)
+	if(nrow >= 1)
 	{
-		printf("%s\n",errmsg);
-		strcpy(empMsg->warn,"get message error.");
-	}else{
-		printf("execute successfully!");
-	}
-	if(nrow == 1)
-	{
-		strcpy(empMsg->warn,"employee cat success.");
-		empMsg->retcli = 1;
-		send(newfd,empMsg,sizeof(empinfo_t),0);
-		return 1;
+		printf("===== get employee message success.=====\n");
+		usrMsg->id = atoi(resultp[6]);
+		strcpy(usrMsg->name,resultp[7]);
+		usrMsg->age = atoi(resultp[8]);
+		strcpy(usrMsg->sex,resultp[9]);
+		strcpy(usrMsg->phone,resultp[10]);
+		strcpy(usrMsg->addr,resultp[11]);
+		send(newfd,usrMsg,sizeof(MSG),0);
 	}
 	if(nrow == 0)
 	{
-		strcpy(empMsg->warn,"employee cat fail.");
-		send(newfd,empMsg,sizeof(empinfo_t),0);
+		memset(usrMsg,0,sizeof(MSG));
+		usrMsg->flags[0] = ERROR;
+		send(newfd,usrMsg,sizeof(MSG),0);
+		printf("usr id not exist!\n");
 	}
-	return 0;
 }
 
-/*****************************
- *更新员工信息
- ****************************/
-
-/*修改员工姓名*/
-int emp_update(int newfd,empinfo_t *empMsg,sqlite3 *db)
+/*********************************************************
+ * Function Name  : emp_data
+ * Description    : base on employee id to update data
+ * Input          : accept socket , MSG 
+ * Output         : None
+ * Return         : None
+ * *******************************************************/
+void emp_data_update(int newfd,MSG *usrMsg)
 {
+	int ret = -1;
 	char sql[300] = {};
-	char *errmsg;
 
-	sprintf(sql,"update emp_info set %s='%s' where name='%s';",\
-			empMsg->tag,empMsg->newdata,empMsg->name);
+	recv(newfd,usrMsg,sizeof(MSG),0);
+
+	sprintf(sql,"update emp_data set age=%d,phone='%s',addr='%s' where id=%d;",\
+			usrMsg->age,usrMsg->phone,usrMsg->addr,usrMsg->id);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(empMsg->warn,"message update error.");
+		usrMsg->flags[0] = ERROR;
+		ret = send(newfd,usrMsg,sizeof(MSG),0);
 	}else{
-		printf("execute successfully!");
-		strcpy(empMsg->warn,"employee update success.");
+		printf("===== data update successfully!=====\n");
+		usrMsg->flags[0] = CGE_SUC;
+		ret = send(newfd,usrMsg,sizeof(MSG),0);
 	}
-	empMsg->retcli = 1;
-	send(newfd,&empMsg,sizeof(empinfo_t),0);
-	return 0;
 }
-#if 0
-/*****************************
- *更新员工信息
- ****************************/
-int emp_update(int newfd,empinfo_t *empMsg,sqlite3 *db)
-{
-	char sql[300] = {};
-	char *errmsg;
 
-	sprintf(sql,"update emp_info set %s='%s' where name='%s';",\
-			empMsg->tag,empMsg->newdata,empMsg->name);
+/*********************************************************
+ * Function Name  : passwd_change
+ * Description    : base on user id to change user password
+ * Input          : accept socket , MSG 
+ * Output         : None
+ * Return         : None
+ * *******************************************************/
+void passwd_change(int newfd,MSG *usrMsg)
+{
+	int ret = -1;
+	char sql[300] = {};
+
+	recv(newfd,usrMsg,sizeof(MSG),0);
+
+	sprintf(sql,"update usr_data set passwd='%s' where id=%d;",\
+			usrMsg->passwd,usrMsg->id);
 	if(sqlite3_exec(db,sql,NULL,NULL,&errmsg) != SQLITE_OK)
 	{
 		printf("%s\n",errmsg);
-		strcpy(empMsg->warn,"message update error.");
+		usrMsg->flags[0] = ERROR;
+		send(newfd,usrMsg,sizeof(MSG),0);
 	}else{
-		printf("execute successfully!");
-		strcpy(empMsg->warn,"employee update success.");
+		printf("===== password change success.=====\n");
+		usrMsg->flags[0] = CGE_SUC;
+		send(newfd,usrMsg,sizeof(MSG),0);
 	}
-	empMsg->retcli = 1;
-	send(newfd,&empMsg,sizeof(empinfo_t),0);
-	return 0;
 }
-#endif
+
