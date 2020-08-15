@@ -27,6 +27,7 @@ void usr_register(int newfd,MSG *usrMsg)
 
 	if(nrow >= 1)
 	{
+		usrMsg->flags[0] = ERROR;
 		send(newfd,usrMsg,sizeof(MSG),0);
 		printf("user is already exist!\n");		
 	}
@@ -54,8 +55,9 @@ void usr_register(int newfd,MSG *usrMsg)
 				if(nrow == 0){
 					usrMsg->flags[0] = ERROR;
 					send(newfd,usrMsg,sizeof(MSG),0);
-
-				}else{
+				}
+				if(nrow >= 1)
+				{
 					usrMsg->id = atoi(resultp[1]);
 					printf(">>>your user id is >%d\n",usrMsg->id);
 

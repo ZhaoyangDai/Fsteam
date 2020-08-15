@@ -39,15 +39,15 @@
 
 typedef struct {
 	int  id;                /*user/employee id 	*/
+	char name[20];          /*employee name 	*/
 	char username[20];      /*user name 		*/
 	char passwd[20];        /*user password 	*/
-	int  type[2]; 			/*user owner 		*/
-	char name[20];          /*employee name 	*/
-	int  age; 				/*employee age 		*/
+	int  flags[2];       	/*return flag 		*/
 	char sex[10]; 			/*employee sex 		*/
+	int  age; 				/*employee age 		*/
 	char phone[11]; 		/*employee phone 	*/
 	char addr[50]; 			/*employee addr 	*/
-	int  flags[2];       	/*return flag 		*/
+	int  type[2]; 			/*user owner 		*/
 }MSG;
 
 sqlite3 *db;

@@ -131,7 +131,7 @@ void client_info(struct sockaddr_in cin)
 		perror("inet_ntop");
 	}
 
-	printf("+++++ client(%s:%d)id connected +++++\n",ipv4_addr,ntohs(cin.sin_port));
+	printf("client(%s:%d)id connected ...\n",ipv4_addr,ntohs(cin.sin_port));
 }
 
 /*********************************************************
@@ -151,13 +151,13 @@ int client_data_ctl(void *arg)
 	{
 		memset(usrMsg,0,sizeof(MSG));
 		ret = recv(newfd,usrMsg,sizeof(MSG),0);
-
 		if(ret <= 0)
 		{
 			perror("recv error");
 			return -1;
 		}
-		printf("++++++ wait choose ++++++\n");
+		printf("------ wait choose ------\n");
+
 		switch(usrMsg->flags[0])
 		{
 		case REGISTER:
