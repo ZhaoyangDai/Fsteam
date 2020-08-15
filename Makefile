@@ -21,5 +21,5 @@ $(SRC_DIR)/%.o:$(SRC_DIR)/%.c
 .PHONY:clean
 
 clean:
-	rm *.o $(TARGET) $(SRC_DIR)/*.o
+	rm *.o $(TARGET) $(SRC_DIR)/*.o *.db
 

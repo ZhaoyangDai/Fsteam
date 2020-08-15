@@ -1,0 +1,61 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ADD_USER	include/server.h	28;"	d
+BACKLOG	include/server.h	16;"	d
+CC	Makefile	/^CC := gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS := -c -o $/;"	m
+CGE_PSW	include/server.h	37;"	d
+CGE_SUC	include/server.h	35;"	d
+CGE_USER	include/server.h	30;"	d
+CHECK_OK	include/server.h	26;"	d
+DELE_SUC	include/server.h	34;"	d
+DELE_USER	include/server.h	29;"	d
+ERROR	include/server.h	38;"	d
+FIND	include/server.h	21;"	d
+INQ_HIS	include/server.h	32;"	d
+INQ_INFO	include/server.h	31;"	d
+LOGIN	include/server.h	20;"	d
+LOGIN_SUC	include/server.h	25;"	d
+MSG	include/server.h	/^}MSG;$/;"	t	typeref:struct:__anon1
+MSGBASE	include/server.h	17;"	d
+OBJS	Makefile	/^OBJS := $(patsubst %.c,%.o,$(OBJSs))$/;"	m
+OBJSs	Makefile	/^OBJSs := $(wildcard $(SRC_DIR)\/*.c)$/;"	m
+QUIT	include/server.h	22;"	d
+REGISTER	include/server.h	19;"	d
+REG_SUC	include/server.h	24;"	d
+SQL	Makefile	/^SQL := -lsqlite3$/;"	m
+SRC_DIR	Makefile	/^SRC_DIR = .\/src$/;"	m
+TARGET	Makefile	/^TARGET ?= servAPP$/;"	m
+__SERVER_H__	include/server.h	2;"	d
+addr	include/server.h	/^	char addr[50]; 			\/*employee addr 	*\/$/;"	m	struct:__anon1
+age	include/server.h	/^	int  age; 				\/*employee age 		*\/$/;"	m	struct:__anon1
+client_data_ctl	server.c	/^int client_data_ctl(void *arg)$/;"	f
+client_info	server.c	/^void client_info(struct sockaddr_in cin)$/;"	f
+db	include/server.h	/^sqlite3 *db;$/;"	v
+emp_cat	src/emp_ctl.c	/^void emp_cat(int newfd,MSG *usrMsg)$/;"	f
+emp_data_update	src/emp_ctl.c	/^void emp_data_update(int newfd,MSG *usrMsg)$/;"	f
+emp_remove	src/emp_ctl.c	/^void emp_remove(int newfd,MSG *usrMsg)$/;"	f
+errmsg	include/server.h	/^char *errmsg;$/;"	v
+flags	include/server.h	/^	int  flags[2];       	\/*return flag 		*\/$/;"	m	struct:__anon1
+id	include/server.h	/^	int  id;                \/*user\/employee id 	*\/$/;"	m	struct:__anon1
+is_root	src/usr_ctl.c	/^void is_root(MSG *usrMsg)$/;"	f
+listen_socket	src/listen.c	/^int listen_socket(const unsigned int port,int backlog )$/;"	f
+login_win	src/usr_ctl.c	/^void login_win(int newfd,MSG * usrMsg)$/;"	f
+main	server.c	/^int main(int argc, const char *argv[])$/;"	f
+name	include/server.h	/^	char name[20];          \/*employee name 	*\/$/;"	m	struct:__anon1
+ncloumn	include/server.h	/^int ncloumn;$/;"	v
+nrow	include/server.h	/^int nrow;$/;"	v
+passwd	include/server.h	/^	char passwd[20];        \/*user password 	*\/$/;"	m	struct:__anon1
+passwd_change	src/emp_ctl.c	/^void passwd_change(int newfd,MSG *usrMsg)$/;"	f
+passwd_find	src/usr_ctl.c	/^void passwd_find(int newfd,MSG *usrMsg)$/;"	f
+phone	include/server.h	/^	char phone[11]; 		\/*employee phone 	*\/$/;"	m	struct:__anon1
+resultp	include/server.h	/^char **resultp;$/;"	v
+sex	include/server.h	/^	char sex[10]; 			\/*employee sex 		*\/$/;"	m	struct:__anon1
+type	include/server.h	/^	int  type[2]; 			\/*user owner 		*\/$/;"	m	struct:__anon1
+username	include/server.h	/^	char username[20];      \/*user name 		*\/$/;"	m	struct:__anon1
+usr_login	src/usr_ctl.c	/^void usr_login(int newfd,MSG *usrMsg)$/;"	f
+usr_register	src/usr_ctl.c	/^void usr_register(int newfd,MSG *usrMsg)$/;"	f
