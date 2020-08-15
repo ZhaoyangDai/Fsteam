@@ -149,6 +149,8 @@ int client_data_ctl(void *arg)
 
 	while(1)
 	{
+		printf("------ wait choose ------\n");
+		
 		memset(usrMsg,0,sizeof(MSG));
 		ret = recv(newfd,usrMsg,sizeof(MSG),0);
 		if(ret <= 0)
@@ -156,7 +158,6 @@ int client_data_ctl(void *arg)
 			perror("recv error");
 			return -1;
 		}
-		printf("------ wait choose ------\n");
 
 		switch(usrMsg->flags[0])
 		{
